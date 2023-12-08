@@ -1,0 +1,34 @@
+.nz-form {
+    max-width: 600px;
+}
+
+h1 {
+    color: #2c3e50;
+    /* Color del texto */
+    font-size: 48px;
+    /* Tamaño de la fuente */
+    font-family: 'Copperplate', fantasy;
+    /* Tipo de fuente */
+    text-align: center;
+    /* Alineación del texto */
+    margin-bottom: 20px;
+    /* Margen inferior */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    /* Sombra del texto */
+    letter-spacing: 2px;
+    /* Espaciado entre letras */
+    /* Fondo gradiente */
+    background: linear-gradient(to right, #3498db, #1abc9c);
+    /* Borde redondeado */
+    border-radius: 10px;
+    /* Padding interno */
+    padding: 20px;
+    /* Transición suave al pasar el ratón */
+    transition: background 0.3s ease-in-out;
+}
+
+h1:hover {
+    background: linear-gradient(to right, #1abc9c, #3498db);
+    color: #fff;
+    /* Cambiar color del texto al pasar el ratón */
+}

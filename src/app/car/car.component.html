@@ -1,0 +1,54 @@
+<h1>Calculate Vehicle Prices</h1>
+<form nz-form [formGroup]="form" (ngSubmit)="calculateTotal()">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="5" nzRequired nzFor="note">Base Price</nz-form-label>
+    <nz-form-control [nzSpan]="12">
+      <input type="number" nz-input formControlName="basePrice" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="5" nzFor="gender" nzRequired>Vehicle Type </nz-form-label>
+    <nz-form-control [nzSpan]="12">
+      <nz-select formControlName="vehicleType" nzPlaceHolder="Select a option and change input text above">
+        <nz-option nzValue="Common" nzLabel="Common"></nz-option>
+        <nz-option nzValue="Luxury" nzLabel="Luxury"></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control [nzSpan]="12" [nzOffset]="5">
+      <button nz-button nzType="primary">Consult</button>
+      <span *ngIf="!form.valid">
+        please complete the information
+      </span>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+
+
+
+<div *ngIf="responseModel.length > 0">
+  <nz-table #basicTable [nzData]="responseModel">
+    <thead>
+      <tr>
+        <th>Base</th>
+        <th>Special</th>
+        <th>Association</th>
+        <th>Storage</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data">
+        <td>{{ data.basicUserFee }}</td>
+        <td>{{ data.sellersSpecialFee }}</td>
+        <td>{{ data.associationFee }}</td>
+        <td>{{ data.storageFee }}</td>
+        <td>{{ data.totalCost }}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>
+<br>
+
+<br>
