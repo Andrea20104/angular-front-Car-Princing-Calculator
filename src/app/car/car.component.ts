@@ -32,6 +32,7 @@ export class CarComponent implements OnInit {
   }
 
   calculateTotal() {
+    this.responseModel = [];
     const request: ICalculateTotalRequest = {
       basePrice: this.form.value.basePrice,
       vehicleType: this.form.value.vehicleType
