@@ -16,13 +16,15 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzGridModule } from 'ng-zorro-antd/grid';
-
+import { ErrorModalComponent } from './error-modal/error-modal.component';
+import { MatDialogModule } from '@angular/material/dialog';
 registerLocaleData(en);
 
 @NgModule({
   declarations: [
     AppComponent,
-    CarComponent
+    CarComponent,
+    ErrorModalComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +37,8 @@ registerLocaleData(en);
     NzButtonModule,
     NzSelectModule,
     NzFormModule,
-    NzGridModule
+    NzGridModule,
+    MatDialogModule
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ICalculateTotalRequest, ICalculateTotalResponse } from 'src/app/models/car.model'
 import { ApiService } from '../api.service';
+import { ErrorModalComponent } from '../error-modal/error-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-car',
@@ -10,7 +12,6 @@ import { ApiService } from '../api.service';
 })
 export class CarComponent implements OnInit {
   public form: FormGroup;
-  public prueba: number | null = 0;
 
   requestModel: ICalculateTotalRequest = {
     basePrice: 0,
@@ -19,8 +20,9 @@ export class CarComponent implements OnInit {
 
   responseModel: ICalculateTotalResponse[] = [];
 
+  error: string = '';
 
-  constructor(private priceCalculationService: ApiService, private formbuilder: FormBuilder) {
+  constructor(private priceCalculationService: ApiService, private formbuilder: FormBuilder, private dialog: MatDialog) {
     this.form = this.formbuilder.group(
       {
         basePrice: ['', { validators: [Validators.required] }],
@@ -31,11 +33,18 @@ export class CarComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  mostrarError(error: string): void {
+    this.dialog.open(ErrorModalComponent, {
+      width: '400px',
+      data: { errorMessage: error || 'An unknown error occurred.' }
+    });
+  }
+
   calculateTotal() {
     this.responseModel = [];
     const request: ICalculateTotalRequest = {
-      basePrice: this.form.value.basePrice,
-      vehicleType: this.form.value.vehicleType
+      basePrice: !this.form.value.basePrice ? 0 : this.form.value.basePrice,
+      vehicleType: !this.form.value.vehicleType ? '' : this.form.value.vehicleType
     };
 
     console.log(request);
@@ -46,7 +55,7 @@ export class CarComponent implements OnInit {
         console.log(this.responseModel)
       },
       (error) => {
-        console.error('Error fetching data:', error);
+        this.mostrarError(error.error);
       }
     );
 

@@ -5,24 +5,38 @@ import { ApiService } from '../api.service';
 import { of } from 'rxjs';
 import { ICalculateTotalResponse } from '../models/car.model';
 import { AppComponent } from '../app.component';
+import { ErrorModalComponent } from '../error-modal/error-modal.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+
+// Create a mock MatDialog class
+class MatDialogMock {
+  open() {
+    return {
+      afterClosed: () => of(true), // you can adjust the return value as needed
+    };
+  }
+}
+
 
 describe('CarComponent', () => {
   let component: CarComponent;
   let fixture: ComponentFixture<CarComponent>;
-  let apiService: jasmine.SpyObj<ApiService>;
+  let apiServiceSpy: jasmine.SpyObj<ApiService>;
 
-  beforeEach(() => {
-    const spyApiService = jasmine.createSpyObj('ApiService', ['calculateTotal']);
+  beforeEach(async () => {
+    apiServiceSpy = jasmine.createSpyObj('ApiService', ['calculateTotal']);
 
-    TestBed.configureTestingModule({
-      declarations: [AppComponent,CarComponent],
-      imports: [ReactiveFormsModule],
-      providers: [{ provide: ApiService, useValue: spyApiService }]
-    });
+    await TestBed.configureTestingModule({
+      declarations: [CarComponent],
+      imports: [ReactiveFormsModule, MatDialogModule],
+      providers: [
+        { provide: ApiService, useValue: apiServiceSpy },
+        { provide: MatDialog, useClass: MatDialogMock }, // use the mock MatDialog class
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CarComponent);
     component = fixture.componentInstance;
-    apiService = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
   });
 
   it('should create', () => {
@@ -41,7 +55,7 @@ describe('CarComponent', () => {
       storageFee: 10,
       totalCost: 185,
     };
-    apiService.calculateTotal.and.returnValue(of(responseMock));
+    apiServiceSpy.calculateTotal.and.returnValue(of(responseMock));
 
     component.form.patchValue({
       basePrice: 10000,
@@ -50,12 +64,11 @@ describe('CarComponent', () => {
 
     component.calculateTotal();
 
-    expect(apiService.calculateTotal).toHaveBeenCalledWith({
+    expect(apiServiceSpy.calculateTotal).toHaveBeenCalledWith({
       basePrice: 10000,
       vehicleType: 'sedan'
     });
 
     expect(component.responseModel).toEqual([responseMock]);
   });
-
 });
